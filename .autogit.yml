@@ -23,7 +23,7 @@ hooks:
     exit 0
 
   install_after: |
-    cd /www
+    cd ./www
     composer install --no-dev --classmap-authoritative --prefer-dist
     exit 0
 
