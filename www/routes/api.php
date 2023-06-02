@@ -54,5 +54,6 @@ Route::post('phantom/fetcher', [DeviceController::class, 'fetcher']);
 
 
 Route::post('/webhook', [WebhookController::class, 'handle']);
+Route::get('/webhook', [WebhookController::class, 'handle']);
 
 //test push to origin
