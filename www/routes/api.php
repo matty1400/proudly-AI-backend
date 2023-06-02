@@ -53,7 +53,33 @@ Route::post('phantom/updateAndLaunch', [DeviceController::class, 'updateAndLaunc
 Route::post('phantom/fetcher', [DeviceController::class, 'fetcher']);
 
 
-Route::post('/webhook', [WebhookController::class, 'handle']);
-Route::get('/webhook', [WebhookController::class, 'handle']);
+
+
+
+
+// Define a shared variable to store the status
+$webhookStatus = 'not done';
+
+// Define the GET route
+Route::get('/webhook', function () use (&$webhookStatus) {
+    return $webhookStatus;
+});
+
+// Define the POST route
+Route::post('/webhook', function (Request $request) use (&$webhookStatus) {
+    $payload = $request->json()->all();
+
+    if ($payload['exitMessage'] === 'finished') {
+        $webhookStatus = 'done';
+    }
+
+    return response()->json(['message' => 'Webhook received']);
+});
+
+// Define the reset route
+Route::get('/webhook/reset', function () use (&$webhookStatus) {
+    $webhookStatus = 'not done';
+    return response()->json(['message' => 'Webhook status reset']);
+});
 
 //test push to origin
