@@ -14,5 +14,8 @@ class WebhookController extends Controller
         if($payload['exitMessage']=='finished'){
             echo 'finished';
         }
+        else{
+            echo 'not done';
+        }
     }
 }
