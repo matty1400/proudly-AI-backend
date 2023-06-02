@@ -383,11 +383,11 @@ class DeviceController extends Controller
         curl_setopt($ch, CURLOPT_URL, 'https://api.phantombuster.com/api/v2/agents/launch');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, '{"id":"5249917770822739","argument":{"numberOfProfiles":100,"extractDefaultUrl":false,"removeDuplicateProfiles":false,"sessionCookie":"AQEDATA3wxABdl0-AAABiGx9LIsAAAGIkImwi04AVzuGOsXLRtVw1kf4d-04DH2GLfYOXzRxBo5HulFrQVsBS74RCATsoRr_tpu9-lEVfk8VoLiV7NAG8_L0oG5mC4Vs6yFU4yTN2Rv62fYICPIRyuNt","searches":"' . $address . '"}}');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, '{"id":"8697827096363829","argument":{"numberOfProfiles":100,"extractDefaultUrl":false,"removeDuplicateProfiles":false,"sessionCookie":"AQEDATA3wxABdl0-AAABiGx9LIsAAAGIkImwi04AVzuGOsXLRtVw1kf4d-04DH2GLfYOXzRxBo5HulFrQVsBS74RCATsoRr_tpu9-lEVfk8VoLiV7NAG8_L0oG5mC4Vs6yFU4yTN2Rv62fYICPIRyuNt","searches":"' . $address . '"}}');
 
         $headers = array();
         $headers[] = 'Content-Type: application/json';
-        $headers[] = 'X-Phantombuster-Key: 056OL29RRtKkfikDIAslL7lytVsODwK3Z5xLsoTDy7Q';
+        $headers[] = 'X-Phantombuster-Key: tvKJdE1a7UnxDkVpbj6p4Ju6wOlbP4LVhVgitqfPCEc';
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
         $result = curl_exec($ch);
@@ -411,9 +411,9 @@ class DeviceController extends Controller
 
         $client = new \GuzzleHttp\Client();
 
-        $response = $client->request('GET', 'https://api.phantombuster.com/api/v2/agents/fetch?id=5249917770822739', [
+        $response = $client->request('GET', 'https://api.phantombuster.com/api/v2/agents/fetch?id=8697827096363829', [
         'headers' => [
-            'X-Phantombuster-Key' => '056OL29RRtKkfikDIAslL7lytVsODwK3Z5xLsoTDy7Q',
+            'X-Phantombuster-Key' => 'tvKJdE1a7UnxDkVpbj6p4Ju6wOlbP4LVhVgitqfPCEc',
             'accept' => 'application/json',
         ],
         ]);
