@@ -57,30 +57,31 @@ Route::post('phantom/fetcher', [DeviceController::class, 'fetcher']);
 
 
 
-// Define a shared variable to store the status
-$webhookStatus = 'not done';
 
-// Define the GET route
-Route::get('/webhook', function () use (&$webhookStatus) {
-    return $webhookStatus;
+// Apply the 'api' middleware group to the routes
+Route::middleware('api')->group(function () {
+    // Define your API routes here
+
+    // Define the GET route
+    Route::get('/webhook', function () {
+        $webhookStatus = session('webhookStatus', 'not done');
+        return $webhookStatus;
+    });
+
+    // Define the POST route
+    Route::post('/webhook', function (Request $request) {
+        $payload = $request->json()->all();
+
+        if ($payload['exitMessage'] === 'finished') {
+            session(['webhookStatus' => 'done']);
+        }
+
+        return response()->json(['message' => 'Webhook received']);
+    });
+
+    // Define the reset route
+    Route::get('/webhook/reset', function () {
+        session(['webhookStatus' => 'not done']);
+        return response()->json(['message' => 'Webhook status reset']);
+    });
 });
-
-// Define the POST route
-Route::post('/webhook', function (Request $request) use (&$webhookStatus) {
-    $payload = $request->json()->all();
-
-    if ($payload['exitMessage'] === 'finished') {
-        $webhookStatus = 'done';
-        return response()->json(['message' => 'Webhookie received']);
-    }
-
-    return response()->json(['message' => 'Webhook received']);
-});
-
-// Define the reset route
-Route::get('/webhook/reset', function () use (&$webhookStatus) {
-    $webhookStatus = 'not done';
-    return response()->json(['message' => 'Webhook status reset']);
-});
-
-//test push to origin
