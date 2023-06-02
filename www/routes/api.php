@@ -72,9 +72,8 @@ Route::middleware('api')->group(function () {
     Route::post('/webhook', function (Request $request) {
         $payload = $request->json()->all();
 
-        if ($payload['exitMessage'] === 'finished') {
-            session(['webhookStatus' => 'done']);
-        }
+       
+        session(['webhookStatus' => 'done']);
 
         return response()->json(['message' => 'Webhook received']);
     });
