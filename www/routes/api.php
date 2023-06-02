@@ -71,6 +71,7 @@ Route::post('/webhook', function (Request $request) use (&$webhookStatus) {
 
     if ($payload['exitMessage'] === 'finished') {
         $webhookStatus = 'done';
+        return response()->json(['message' => 'Webhookie received']);
     }
 
     return response()->json(['message' => 'Webhook received']);
