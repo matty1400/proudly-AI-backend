@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\dummyApi;
 use App\Http\Controllers\DeviceController;
+use App\Http\Controllers\WebhookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,5 +52,7 @@ Route::post('company/searches', [DeviceController::class, 'newCompanySearch']);
 Route::post('phantom/updateAndLaunch', [DeviceController::class, 'updateAndLaunch']);
 Route::post('phantom/fetcher', [DeviceController::class, 'fetcher']);
 
+
+Route::post('/webhook', [WebhookController::class, 'handle']);
 
 //test push to origin
