@@ -13,16 +13,19 @@ use Exception;
 class WebhookController extends Controller
 {
     public function updateJobStatus(){
-        $data = jobs::where('ID', jobs::max('ID'))->select('job_status')->first();
-        $data->status = "completed";
-        $data->save();
+        $data = jobs::where('ID', jobs::max('ID'))->first(); // Fetch the job
+        $data->job_status = "completed"; // Update the job_status property
+        $data->save(); // Save the changes to the database
+        
+        
     }
     
     public function handle(Request $request)
     {
         $data = $request->all();
        
-        $data =  $data = jobs::where('ID', jobs::max('ID'))->select('job_status')->first();
+        $data =  $data = jobs::where('ID', jobs::max('ID'))->select()->first();
+        
         if($data->company_search_id != null){
             $search_id = $data->company_search_id;
             $type = "company";
@@ -74,16 +77,37 @@ class WebhookController extends Controller
               try {
                 if($type=="company"){
                 foreach ($jsonData as $data) {
-                    $companyId = $data->companyId;
-                    $companyName = $data->companyName;
-                    $description = $data->description;
-                    $companyUrl = $data->companyUrl;
-                    $headcount = $data->employeeCountRange;
+                   if (isset($data->companyId)) {
+                        $companyId = $data->companyId;
+                    } else {
+                        $companyId = 'No id available';
+                    }
+                    if (isset($data->companyName)) {
+                        $companyName = $data->companyName;
+                    } else {
+                        $companyName = 'No name available';
+                    }
+                    if (isset($data->description)) {
+                        $description = $data->description;
+                    } else {
+                        $description = 'No description available';
+                    }
+                   if (isset($data->companyUrl)) {
+                        $companyUrl = $data->companyUrl;
+                    } else {
+                        $companyUrl = 'No url available';
+                    }
+                    if (isset($data->headcount)) {
+                        $headcount = $data->headcount;
+                    } else {
+                        $headcount = 'No headcount available';
+                    }
 
 
                     $companyLead = new company_leads();
                     $companyLead->company_id = $companyId;
                     $companyLead->name = $companyName;
+                   
                     $companyLead->description = $description;
                     $companyLead->company_url = $companyUrl;
                     $companyLead->headcount = $headcount;
@@ -128,7 +152,7 @@ class WebhookController extends Controller
                 }
 
                 echo "Data inserted successfully!";
-                $this->updateJobStatus();
+              
             }
             catch (Exception $e) {
                 echo "Error: " . $e->getMessage();

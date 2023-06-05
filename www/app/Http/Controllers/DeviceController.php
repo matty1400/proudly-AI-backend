@@ -241,6 +241,20 @@ class DeviceController extends Controller
         return response()->json($data);
 
     }
+    public function updateJobStatus(Request $request)
+    {
+        $data = jobs::orderBy('ID', 'desc')->first();
+    
+        if (!$data) {
+            return response()->json(['message' => 'No jobs found'], 404);
+        }
+    
+        $data->job_status = "completed";
+        $data->save();
+    
+        return 'updated';
+    }
+    
 
     // POST REQUESTS
 
@@ -418,10 +432,11 @@ class DeviceController extends Controller
 
     // Fetcher function
     function fetcher() {
-        $data = jobs::all()->where("ID",max("ID"))->select()->first();
+        $data= jobs::where('ID', jobs::max('ID'))->select('job_status')->first();
         if($data->company_search_id != null){
             $search_id = $data->company_search_id;
             $type = "company";
+            return $search_id;
         }
         else{
             $search_id = $data->people_search_id;
