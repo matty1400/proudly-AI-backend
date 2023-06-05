@@ -40,6 +40,7 @@ Route::get('people/leads', [DeviceController::class, 'getPeopleLeadsBySearchId']
 Route::get('company/filter/allindustries', [DeviceController::class, 'getIndustryNames']);
 Route::get('company/filter/allheadcounts', [DeviceController::class, 'getHeadcount']);
 Route::get('company/filter/allheadquarters', [DeviceController::class, 'getHeadquarters']);
+Route::get('jobs/status', [DeviceController::class, 'getCurrentJobStatus']);
 
 
 
@@ -52,35 +53,11 @@ Route::post('company/searches', [DeviceController::class, 'newCompanySearch']);
 Route::post('phantom/updateAndLaunch', [DeviceController::class, 'updateAndLaunch']);
 Route::post('phantom/fetcher', [DeviceController::class, 'fetcher']);
 
+Route::post('webhook', [WebhookController::class, 'handle']);
 
 
 
 
 
 
-// Apply the 'api' middleware group to the routes
-Route::middleware('api')->group(function () {
-    // Define your API routes here
 
-    // Define the GET route
-    Route::get('/webhook', function () {
-        $webhookStatus = session('webhookStatus', 'not done');
-        return $webhookStatus;
-    });
-
-    // Define the POST route
-    Route::post('/webhook', function (Request $request) {
-        $payload = $request->json()->all();
-
-       
-        session(['webhookStatus' => 'done']);
-
-        return response()->json(['message' => 'Webhook received']);
-    });
-
-    // Define the reset route
-    Route::get('/webhook/reset', function () {
-        session(['webhookStatus' => 'not done']);
-        return response()->json(['message' => 'Webhook status reset']);
-    });
-});

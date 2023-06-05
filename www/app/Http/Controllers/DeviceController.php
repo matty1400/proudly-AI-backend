@@ -14,6 +14,7 @@ use App\Models\people_search;
 use App\Models\people_leads;
 use App\Models\company_search;
 use App\Models\users;
+use App\Models\jobs;
 use Exception;
 use GuzzleHttp\Client;
 
@@ -235,6 +236,11 @@ class DeviceController extends Controller
         return response()->json($data);
     }
 
+    public function getCurrentJobStatus(){
+        $data = jobs::all()->where("ID",max("ID"))->select('job_status')->first();
+        return response()->json($data);
+    }
+
     // POST REQUESTS
 
 
@@ -345,6 +351,11 @@ class DeviceController extends Controller
 
         $primary_key = $data->getKey();
 
+        $data = new jobs;
+        $data->company_search_id = $primary_key;
+        $data->save();
+
+
         return response()->json(['company_search' => $primary_key]);
     }
     public function newPeopleSearch(Request $request){
@@ -365,6 +376,10 @@ class DeviceController extends Controller
         $data->save();
 
         $primary_key = $data->getKey();
+        $data = new jobs;
+        $data->people_search_id = $primary_key;
+        $data->save();
+        
 
         return response()->json(['people_search_key' => $primary_key]);
 
@@ -401,10 +416,19 @@ class DeviceController extends Controller
 
 
     // Fetcher function
-    function fetcher(Request $request) {
+    function fetcher() {
+        $data = jobs::all()->where("ID",max("ID"))->select()->first();
+        if($data->company_search_id != null){
+            $search_id = $data->company_search_id;
+            $type = "company";
+        }
+        else{
+            $search_id = $data->people_search_id;
+            $type = "people";
+        }
 
-       $search_id = $request->header('search_id');
-       $type = $request->header('type');
+
+     
 
 
         // require_once('vendor/autoload.php');
@@ -443,7 +467,7 @@ class DeviceController extends Controller
             else {
               // Process the decoded JSON data
               try {
-                if($type=="companysearch"){
+                if($type=="company"){
                 foreach ($jsonData as $data) {
                     $companyId = $data->companyId;
                     $companyName = $data->companyName;
@@ -465,7 +489,7 @@ class DeviceController extends Controller
 
                     $companyLead->save();
                 }}
-                if($type=="peoplesearch"){
+                if($type=="people"){
                     foreach ($jsonData as $record) {
 
 
