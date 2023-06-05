@@ -13,9 +13,8 @@ use Exception;
 class WebhookController extends Controller
 {
     public function updateJobStatus(){
-        $data = jobs::where('ID', jobs::max('ID'))->first(); // Fetch the job
-        $data->job_status = "completed"; // Update the job_status property
-        $data->save(); // Save the changes to the database
+        $highestId = jobs::max('ID');
+        jobs::where('ID',$highestId)->update(['job_status'=>'done']);
         
         
     }
@@ -152,6 +151,7 @@ class WebhookController extends Controller
                 }
 
                 echo "Data inserted successfully!";
+                $this->updateJobStatus();
               
             }
             catch (Exception $e) {

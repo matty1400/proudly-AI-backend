@@ -42,7 +42,7 @@ Route::get('company/filter/allheadcounts', [DeviceController::class, 'getHeadcou
 Route::get('company/filter/allheadquarters', [DeviceController::class, 'getHeadquarters']);
 Route::get('jobs/status', [DeviceController::class, 'getCurrentJobStatus']);
 
-Route::put('jobs/status', [DeviceController::class, 'updateJobStatus']);
+Route::put('jobs/status', [WebhookController::class, 'updateJobStatus']);
 
 
 

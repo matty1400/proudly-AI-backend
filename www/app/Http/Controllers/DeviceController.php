@@ -241,19 +241,11 @@ class DeviceController extends Controller
         return response()->json($data);
 
     }
-    public function updateJobStatus(Request $request)
-    {
-        $data = jobs::orderBy('ID', 'desc')->first();
-    
-        if (!$data) {
-            return response()->json(['message' => 'No jobs found'], 404);
-        }
-    
-        $data->job_status = "completed";
-        $data->save();
-    
-        return 'updated';
-    }
+ 
+
+   
+
+
     
 
     // POST REQUESTS
