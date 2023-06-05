@@ -13,7 +13,7 @@ use Exception;
 class WebhookController extends Controller
 {
     public function updateJobStatus(){
-        $data = jobs::all()->where("ID",max("ID"))->select()->first();
+        $data = jobs::where('ID', jobs::max('ID'))->select('job_status')->first();
         $data->status = "completed";
         $data->save();
     }
@@ -22,7 +22,7 @@ class WebhookController extends Controller
     {
         $data = $request->all();
        
-        $data = jobs::all()->where("ID",max("ID"))->select()->first();
+        $data =  $data = jobs::where('ID', jobs::max('ID'))->select('job_status')->first();
         if($data->company_search_id != null){
             $search_id = $data->company_search_id;
             $type = "company";
