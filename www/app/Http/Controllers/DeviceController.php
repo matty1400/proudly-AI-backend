@@ -150,7 +150,7 @@ class DeviceController extends Controller
             $data = filter_seniority::where('seniority_name', $name)->where('is_active', 1)->select('ID')->first();
         }
         else {
-            $data = filter_seniority::all('ID');
+            $data = filter_seniority::all('ID', 'seniority_name');
         }
 
         return response()->json($data);
@@ -167,7 +167,7 @@ class DeviceController extends Controller
             $data = filter_function::where('function_name', $name)->where('is_active', 1)->select('ID')->first();
         }
         else {
-            $data = filter_function::all('ID');
+            $data = filter_function::all('ID', 'function_name');
         }
 
         return response()->json($data);
