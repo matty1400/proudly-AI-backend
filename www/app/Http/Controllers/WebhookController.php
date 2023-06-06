@@ -121,22 +121,22 @@ class WebhookController extends Controller
                     foreach ($jsonData as $record) {
 
 
-                        if (!isset($record->companyId) || !isset($record->regularCompanyUrl)) {
+                        if (!isset($record->companyId) || !isset($record->regularCompanyUrl) || !isset($record->fullName)) {
                             continue; // Skip this record if companyId or regularCompanyUrl is missing
                         }
                         $peopleLead = new people_leads();
 
 
                         $peopleLead->full_name = $record->fullName;
-                        $peopleLead->company_name = $record->companyName;
+                        $peopleLead->company_name = isset($record->companyName) ? $record->companyName : null;
                         $peopleLead->company_id = $record->companyId;
                         $peopleLead->regular_company_url = $record->regularCompanyUrl;
-                        $peopleLead->title = $record->title;
+                        $peopleLead->title = isset($record->title) ? $record->title : null;
                         $peopleLead->mail = isset($record->mail) ? $record->mail : null;
-                        $peopleLead->person_url = $record->profileUrl;
-                        $peopleLead->connection_degree = $record->connectionDegree;
-                        $peopleLead->company_location = $record->companyLocation;
-                        $peopleLead->person_location = $record->location;
+                        $peopleLead->person_url = isset($record->profileUrl) ? $record->profileUrl : null;
+                        $peopleLead->connection_degree = isset($record->connectionDegree) ? $record->connectionDegree : null;
+                        $peopleLead->company_location = isset($record->companyLocation) ? $record->companyLocation : null;
+                        $peopleLead->person_location = isset($record->location) ? $record->location : null;
                         $peopleLead->search_id = $search_id; // Change this value to the appropriate search ID
                         $peopleLead->created_at = now();
                         $peopleLead->updated_at = now();
