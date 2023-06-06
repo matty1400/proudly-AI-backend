@@ -16,7 +16,10 @@ use App\Models\company_search;
 use App\Models\users;
 use App\Models\jobs;
 use Exception;
+use App\Mail\WelcomeMail;
 use GuzzleHttp\Client;
+
+use Illuminate\Support\Facades\Mail;
 
 
 
@@ -350,6 +353,7 @@ class DeviceController extends Controller
 
 
         $data->save();
+        $this->sendWelcomeEmail($mail,$username);
 
         return response()->json(['message' => 'Data added successfully']);
     }
@@ -385,16 +389,22 @@ class DeviceController extends Controller
     }
     public function newPeopleSearch(Request $request){
         $user_id = $request->header('user_id');
+        $industry = $request->header('industry');
+        $geography = $request->header('geography');
+        $headcount = $request->header('headcount');
 
         $job_function = $request->header('function');
         $job_seniority = $request->header('seniority');
-        $current_company = $request->header('current_company');
+       
 
         $data = new people_search;
         $data->user_id = $user_id;
+        $data->industry = $industry;
+        $data->geography = $geography;
+        $data->headcount = $headcount;
         $data->function = $job_function;
         $data->seniority = $job_seniority;
-        $data->current_company = $current_company;
+        
         $data->created_at = now();
         $data->updated_at = now();
         $data->is_active = 1;
@@ -578,4 +588,13 @@ class DeviceController extends Controller
         return response()->json(['message' => 'People Lead Deleted Successfully']);
 
     }   
+
+    public function sendWelcomeEmail($email, $name)
+    {
+        $data = [
+            'name' => $name,
+        ];
+
+        Mail::to($email)->send(new WelcomeMail($data));
+    }
 }

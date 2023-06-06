@@ -36,14 +36,15 @@ return [
     'mailers' => [
         'smtp' => [
             'transport' => 'smtp',
-            'host' => env('MAIL_HOST', 'smtp-auth.mailprotect.be'),
-            'port' => env('MAIL_PORT', 587),
+            'host' => "smtp-auth.mailprotect.be",
+            'port' => 587,
             'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-            'username' => env('proudly@matijseraly.be'),
-            'password' => env('123mippy'),
+            'username' =>  'proudly@matijseraly.be',
+            'password' =>  '123mippy',
             'timeout' => null,
             'local_domain' => env('MAIL_EHLO_DOMAIN'),
         ],
+        
 
         'ses' => [
             'transport' => 'ses',
@@ -98,7 +99,7 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
+        'address' => "proudly@matijseraly.be",
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
