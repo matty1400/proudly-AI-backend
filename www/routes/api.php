@@ -45,6 +45,8 @@ Route::get('company/filter/allheadquarters', [DeviceController::class, 'getHeadq
 Route::get('jobs/status', [DeviceController::class, 'getCurrentJobStatus']);
 
 Route::put('jobs/status', [WebhookController::class, 'updateJobStatus']);
+Route::put("company/leads/delete", [DeviceController::class, 'deleteCompanyLeads']);
+Route::put("people/leads/delete", [DeviceController::class, 'deletePeopleLeads']);
 
 
 

@@ -559,4 +559,23 @@ class DeviceController extends Controller
 
     }
 
+    //DElete LEADS
+
+    public function deleteCompanyLeads(Request $request){
+        $id = $request->header('id');
+        company_leads::where('id',$id)->update(['is_active'=>0]);
+        
+        return response()->json(['message' => 'Company Lead Deleted Successfully']);
+    }
+    public function deletePeopleLeads(Request $request){
+        $id = $request->header('id');
+        // if(!$id){
+        //     $id = $request->query('id');
+        // }
+        
+        people_leads::where('id',$id)->update(['is_active'=>0]);
+        
+        return response()->json(['message' => 'People Lead Deleted Successfully']);
+
+    }   
 }
