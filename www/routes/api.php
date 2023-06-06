@@ -34,7 +34,9 @@ Route::get('company/filter/headquarters', [DeviceController::class, 'getIdByHead
 Route::get('people/filter/seniority', [DeviceController::class, 'getIdBySeniority']);
 Route::get('people/filter/function', [DeviceController::class, 'getIdByFunction']);
 Route::get('company/searches', [DeviceController::class, 'getCompanySearchByUserId']);
+Route::get('company/searchesbyid', [DeviceController::class, 'getCompanySearchById']);
 Route::get('people/searches', [DeviceController::class, 'getPeopleSearchByUserId']);
+Route::get('people/searchesbyid', [DeviceController::class, 'getPeopleSearchById']);
 Route::get('company/leads', [DeviceController::class, 'getCompanyLeadsBySearchId']);
 Route::get('people/leads', [DeviceController::class, 'getPeopleLeadsBySearchId']);
 Route::get('company/filter/allindustries', [DeviceController::class, 'getIndustryNames']);

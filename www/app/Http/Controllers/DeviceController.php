@@ -63,6 +63,24 @@ class DeviceController extends Controller
 
         return response()->json($data);
     }
+    public function getCompanySearchById(Request $request){
+        $id = $request->header('id'); // Accessing the 'id' header
+        if (!$id) {
+            // If header parameters are not provided, check query parameters
+            $id = $request->query('id');
+        }
+        $data = company_search::where('id', $id)->first();
+        return response()->json($data);
+    }
+    public function getPeopleSearchById(Request $request){
+        $id = $request->header('id'); // Accessing the 'id' header
+        if (!$id) {
+            // If header parameters are not provided, check query parameters
+            $id = $request->query('id');
+        }
+        $data = people_search::where('id', $id)->first();
+        return response()->json($data);
+    }
 
     public function getIndustryNames()
     {
