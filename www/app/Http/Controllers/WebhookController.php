@@ -18,6 +18,41 @@ class WebhookController extends Controller
         
         
     }
+    public function downloadCSV(){
+        $client = new \GuzzleHttp\Client();
+
+        $response = $client->request('GET', 'https://api.phantombuster.com/api/v2/agents/fetch?id=8697827096363829', [
+        'headers' => [
+            'X-Phantombuster-Key' => 'tvKJdE1a7UnxDkVpbj6p4Ju6wOlbP4LVhVgitqfPCEc',
+            'accept' => 'application/json',
+        ],
+        ]);
+
+        $responseBody = json_decode($response->getBody(), true);
+
+        // Store the s3Folder and orgs3Folder values in variables
+        $s3Folder = $responseBody['s3Folder'];
+        $orgs3Folder = $responseBody['orgS3Folder'];
+
+        // You can do further processing or return the values as needed
+
+        $url = "https://phantombuster.s3.amazonaws.com/{$orgs3Folder}/{$s3Folder}/result.csv";
+
+        $filename = "result.csv";
+
+        // Set appropriate headers for the download
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+
+        // Read the file and output it directly to the user
+        readfile($url);
+        exit;
+
+    }
     
     public function handle(Request $request)
     {

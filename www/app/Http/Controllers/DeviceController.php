@@ -179,10 +179,10 @@ class DeviceController extends Controller
 
     public function getCompanySearchByUserId(request $request)
     {
-        $user_id = $request->header('user_id'); // Accessing the 'user_id' header
+        $user_id = $request->header('userId'); // Accessing the 'user_id' header
         if (!$user_id) {
             // If header parameters are not provided, check query parameters
-            $user_id = $request->query('user_id');
+            $user_id = $request->query('userId');
         }
         if ($user_id) {
             $data = company_search::all()->where('user_id', $user_id)->where('is_active', 1);
