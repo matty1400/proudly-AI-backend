@@ -200,10 +200,10 @@ class DeviceController extends Controller
 
     public function getCompanyLeadsBySearchId(request $request)
     {
-        $search_id = $request->header('search_id'); // Accessing the 'search_id' header
+        $search_id = $request->header('searchId'); // Accessing the 'search_id' header
         if (!$search_id) {
             // If header parameters are not provided, check query parameters
-            $search_id = $request->query('search_id');
+            $search_id = $request->query('searchId');
         }
         if ($search_id) {
             $data = company_leads::all()->where('search_id', $search_id)->where('is_active', 1);
@@ -219,10 +219,10 @@ class DeviceController extends Controller
     }
 
     public function getPeopleSearchByUserId(request $request){
-        $user_id = $request->header('user_id'); // Accessing the 'user_id' header
+        $user_id = $request->header('userId'); // Accessing the 'user_id' header
         if (!$user_id) {
             // If header parameters are not provided, check query parameters
-            $user_id = $request->query('user_id');
+            $user_id = $request->query('userId');
         }
 
         if ($user_id) {
@@ -239,10 +239,10 @@ class DeviceController extends Controller
     }
 
     public function getPeopleLeadsBySearchId(request $request){
-        $search_id = $request->header('search_id'); // Accessing the 'search_id' header
+        $search_id = $request->header('searchId'); // Accessing the 'search_id' header
         if (!$search_id) {
             // If header parameters are not provided, check query parameters
-            $search_id = $request->query('search_id');
+            $search_id = $request->query('searchId');
         }
         if ($search_id) {
             $data = people_leads::all()->where('search_id', $search_id)->where('is_active', 1);
@@ -359,7 +359,7 @@ class DeviceController extends Controller
     }
     public function newCompanySearch(Request $request){
 
-        $user_id = $request->header('user_id');
+        $user_id = $request->header('userId');
         $anual_revenue = $request->header('anual_revenue');
         $headcount = $request->header('headcount');
         $industry = $request->header('industry');
