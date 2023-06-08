@@ -388,7 +388,7 @@ class DeviceController extends Controller
         return response()->json(['company_search' => $primary_key]);
     }
     public function newPeopleSearch(Request $request){
-        $user_id = $request->header('user_id');
+        $user_id = $request->header('userId');
         $industry = $request->header('industry');
         $geography = $request->header('geography');
         $headcount = $request->header('headcount');
