@@ -43,7 +43,7 @@ Route::get('company/filter/allindustries', [DeviceController::class, 'getIndustr
 Route::get('company/filter/allheadcounts', [DeviceController::class, 'getHeadcount']);
 Route::get('company/filter/allheadquarters', [DeviceController::class, 'getHeadquarters']);
 Route::get('jobs/status', [DeviceController::class, 'getCurrentJobStatus']);
-Route::get('downloadCSV', [WebhookController::class, 'downloadCSV']);
+
 
 Route::put('jobs/status', [WebhookController::class, 'updateJobStatus']);
 Route::put("company/leads/delete", [DeviceController::class, 'deleteCompanyLeads']);
@@ -59,6 +59,8 @@ Route::post('people/searches', [DeviceController::class, 'newPeopleSearch']);
 Route::post('company/searches', [DeviceController::class, 'newCompanySearch']);
 Route::post('phantom/updateAndLaunch', [DeviceController::class, 'updateAndLaunch']);
 Route::post('phantom/fetcher', [DeviceController::class, 'fetcher']);
+
+Route::post('export', [WebhookController::class, 'exportToCSV']);
 
 Route::post('webhook', [WebhookController::class, 'handle']);
 

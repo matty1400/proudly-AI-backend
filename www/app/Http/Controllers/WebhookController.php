@@ -7,6 +7,9 @@ use App\http\Controllers\DeviceController;
 use App\Models\company_leads;
 use App\Models\jobs;
 use App\Models\people_leads;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use League\Csv\Writer;
+use Illuminate\Support\Facades\DB;
 use Exception;
 
 
@@ -18,42 +21,65 @@ class WebhookController extends Controller
         
         
     }
-    public function downloadCSV(){
-        $client = new \GuzzleHttp\Client();
 
-        $response = $client->request('GET', 'https://api.phantombuster.com/api/v2/agents/fetch?id=8697827096363829', [
-        'headers' => [
-            'X-Phantombuster-Key' => 'tvKJdE1a7UnxDkVpbj6p4Ju6wOlbP4LVhVgitqfPCEc',
-            'accept' => 'application/json',
-        ],
-        ]);
-
-        $responseBody = json_decode($response->getBody(), true);
-
-        // Store the s3Folder and orgs3Folder values in variables
-        $s3Folder = $responseBody['s3Folder'];
-        $orgs3Folder = $responseBody['orgS3Folder'];
-
-        // You can do further processing or return the values as needed
-
-        $url = "https://phantombuster.s3.amazonaws.com/{$orgs3Folder}/{$s3Folder}/result.csv";
-
-        $filename = "result.csv";
-
-        // Set appropriate headers for the download
-        header('Content-Description: File Transfer');
-        header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate');
-        header('Pragma: public');
-
-        // Read the file and output it directly to the user
-        readfile($url);
-        exit;
-
+    
+   
+    
+    public function exportToCSV(Request $request)
+    {
+        $search_id = $request->header('searchId');
+        $columns = [
+            'id',
+            'full_name',
+            'company_name',
+            'company_id',
+            'regular_company_url',
+            'title',
+            'mail',
+            'person_url',
+            'connection_degree',
+            'company_location',
+            'person_location'
+        ];
+    
+        $data = DB::table('people_leads')
+                    ->where('search_id', $search_id)
+                    ->select($columns)
+                    ->get();
+    
+                    $response = new StreamedResponse(function () use ($data, $columns) {
+                        $handle = fopen('php://output', 'w');
+                
+                        // Add CSV headers
+                        fputcsv($handle, $columns);
+                
+                        // Add data rows
+                        foreach ($data as $row) {
+                            fputcsv($handle, (array) $row);
+                        }
+                
+                        fclose($handle);
+                    });
+                
+                    $fileName = 'results_search'.$search_id.'.csv';
+                
+                    $response->headers->set('Content-Type', 'text/csv');
+                    $response->headers->set('Content-Disposition', 'attachment; filename="' . $fileName . '"');
+                
+                    return $response;
     }
     
+    //   // Set appropriate headers for the download
+    //   header('Content-Description: File Transfer');
+    //   header('Content-Type: application/octet-stream');
+    //   header('Content-Disposition: attachment; filename="' . $filename . '"');
+    //   header('Expires: 0');
+    //   header('Cache-Control: must-revalidate');
+    //   header('Pragma: public');
+
+    //   // Read the file and output it directly to the user
+    //   readfile($url);
+    //   exit;
     public function handle(Request $request)
     {
         $data = $request->all();
