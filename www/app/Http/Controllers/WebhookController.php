@@ -43,31 +43,32 @@ class WebhookController extends Controller
         ];
     
         $data = DB::table('people_leads')
-                    ->where('search_id', $search_id)
-                    ->select($columns)
-                    ->get();
+            ->where('search_id', $search_id)
+            ->select($columns)
+            ->get();
     
-                    $response = new StreamedResponse(function () use ($data, $columns) {
-                        $handle = fopen('php://output', 'w');
-                
-                        // Add CSV headers
-                        fputcsv($handle, $columns);
-                
-                        // Add data rows
-                        foreach ($data as $row) {
-                            fputcsv($handle, (array) $row);
-                        }
-                
-                        fclose($handle);
-                    });
-                
-                    $fileName = 'results_search'.$search_id.'.csv';
-                
-                    $response->headers->set('Content-Type', 'text/csv');
-                    $response->headers->set('Content-Disposition', 'attachment; filename="' . $fileName . '"');
-                
-                    return $response;
+        $fileName = 'results_search' . $search_id . '.csv';
+    
+        $response = new StreamedResponse(function () use ($data, $columns) {
+            $handle = fopen('php://output', 'w');
+    
+            // Add CSV headers
+            fputcsv($handle, $columns);
+    
+            // Add data rows
+            foreach ($data as $row) {
+                fputcsv($handle, (array)$row);
+            }
+    
+            fclose($handle);
+        });
+    
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $fileName . '"');
+    
+        return $response->send();
     }
+    
     
     //   // Set appropriate headers for the download
     //   header('Content-Description: File Transfer');
