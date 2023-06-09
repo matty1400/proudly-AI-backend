@@ -67,11 +67,11 @@ class WebhookController extends Controller
     
         $response = new Response($csvContent, 200, [
             'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
         ]);
     
         return $response;
     }
+    
     
 
     
