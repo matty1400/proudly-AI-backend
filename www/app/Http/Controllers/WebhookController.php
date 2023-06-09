@@ -9,6 +9,7 @@ use App\Models\jobs;
 use App\Models\people_leads;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use League\Csv\Writer;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Exception;
 
@@ -26,57 +27,52 @@ class WebhookController extends Controller
    
     
     public function exportToCSV(Request $request)
-{
-    $search_id = $request->header('searchId');
-    $columns = [
-        'id',
-        'full_name',
-        'company_name',
-        'company_id',
-        'regular_company_url',
-        'title',
-        'mail',
-        'person_url',
-        'connection_degree',
-        'company_location',
-        'person_location'
-    ];
-
-    $data = DB::table('people_leads')
-        ->where('search_id', $search_id)
-        ->select($columns)
-        ->get();
-
-    $fileName = 'results_search' . $search_id . '.csv';
-
-    $csvFilePath = 'downloads/' . $fileName;
-
-    $handle = fopen($csvFilePath, 'w');
-
-    // Add CSV headers
-    fputcsv($handle, $columns);
-
-    // Add data rows
-    foreach ($data as $row) {
-        fputcsv($handle, (array)$row);
-    }
-
-    fclose($handle);
-
-    $response = new StreamedResponse(function () use ($csvFilePath) {
-        $handle = fopen($csvFilePath, 'r');
-        fpassthru($handle);
+    {
+        $search_id = $request->header('searchId');
+        $columns = [
+            'id',
+            'full_name',
+            'company_name',
+            'company_id',
+            'regular_company_url',
+            'title',
+            'mail',
+            'person_url',
+            'connection_degree',
+            'company_location',
+            'person_location'
+        ];
+    
+        $data = DB::table('people_leads')
+            ->where('search_id', $search_id)
+            ->select($columns)
+            ->get();
+    
+        $fileName = 'results_search' . $search_id . '.csv';
+    
+        $handle = fopen('php://temp', 'w+');
+    
+        // Add CSV headers
+        fputcsv($handle, $columns);
+    
+        // Add data rows
+        foreach ($data as $row) {
+            fputcsv($handle, (array)$row);
+        }
+    
+        rewind($handle);
+    
+        $csvContent = stream_get_contents($handle);
         fclose($handle);
-    });
-
-    $response->headers->set('Content-Type', 'text/csv');
-    $response->headers->set('Content-Disposition', 'attachment; filename="' . $fileName . '"');
-
-    // Remove the CSV file after sending
-    unlink($csvFilePath);
-
-    return $response->send();
-}
+    
+        $response = new Response($csvContent, 200, [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+        ]);
+    
+        return $response;
+    }
+    
 
     
     //   // Set appropriate headers for the download
