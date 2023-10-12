@@ -258,8 +258,9 @@ class DeviceController extends Controller
     }
 
     public function getCurrentJobStatus(){
-        $data = jobs::where('ID', jobs::max('ID'))->select('job_status')->first();
-        return response()->json($data);
+        // $data = jobs::where('ID', jobs::max('ID'))->select('job_status')->first();
+        // return response()->json($data);
+        return "test";
 
     }
  
