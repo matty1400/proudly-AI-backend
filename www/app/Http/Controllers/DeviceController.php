@@ -185,7 +185,7 @@ class DeviceController extends Controller
             $topic_id = $request->query('topicId');
         }
         if ($topic_id) {
-            $data = topics::all()->where('id', $topic_id)->where('is_active', 1);
+            $data = topics::all()->where('id', $topic_id);
             if($data->isEmpty()) {
                 $data = "topic not found";
             }
@@ -199,7 +199,7 @@ class DeviceController extends Controller
 
     public function getTopics( Request $request){
 
-        $data = topics::all()->where('is_active', 1);
+        $data = topics::all();
         if($data->isEmpty()) {
             $data = "topics not found";
         }
