@@ -43,7 +43,7 @@ class DeviceController extends Controller
         $data = users::where('username', $username)
                      ->where('password', $password)
                      ->where('is_active', 1)
-                     ->first();
+                     ->first('id');
 
         if ($data) {
             return response()->json($data);
