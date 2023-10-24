@@ -195,7 +195,7 @@ class DeviceController extends Controller
 
     }
 
-    public function getTopics(Request $request){
+    public function getTopics( Request $request){
 
         $data = topics::all()->where('is_active', 1);
         if($data->isEmpty()) {

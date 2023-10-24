@@ -23,14 +23,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // GET REQUESTS
 
-Route::get('user/{username?}/{password?}', [DeviceController::class, 'getUser']);
-Route::get('user', [DeviceController::class, 'getUserById']);
-Route::get('user/{username?}', [DeviceController::class, 'getUserByName']);
+Route::get('user', [DeviceController::class, 'getUser']);
+Route::get('user/id/{id?}', [DeviceController::class, 'getUserById']);
+Route::get('user/username/{username?}', [DeviceController::class, 'getUserByName']);
 Route::get('stories/{userId?}', [DeviceController::class, 'getStoryByUserId']);
 Route::get('likes/{storyId?}', [DeviceController::class, 'getLikesByStoryId']);
 Route::get('comments/{storyId?}', [DeviceController::class, 'getCommentsByStoryId']);
 Route::get('follows/{userId?}', [DeviceController::class, 'getFollowsByUserId']);
-Route::get('topics/{topicId?}', [DeviceController::class, 'getTopicById']);
+Route::get('topics/id/{topicId?}', [DeviceController::class, 'getTopicById']);
 Route::get('topics', [DeviceController::class, 'getTopics']);
 
 
