@@ -32,8 +32,8 @@ class DeviceController extends Controller
     // GET REQUESTS
     public function getUser(Request $request){
 
-        $username = $request->header('username'); // Accessing the 'email' header
-        $password = $request->header('password'); // Accessing the 'password' header
+        $username = $request->query('username'); // Accessing the 'email' header
+        $password = $request->query('password'); // Accessing the 'password' header
 
         if (!$username || !$password) {
             // If header parameters are not provided, check query parameters
@@ -259,10 +259,10 @@ class DeviceController extends Controller
 
     public function postStory(Request $request){
 
-        $title = $request->header('title');
-        $body = $request->header('body');
-        $user_id = $request->header('userId');
-        $topic_id = $request->header('topicId');
+        $title = $request->query('title');
+        $body = $request->query('body');
+        $user_id = $request->query('userId');
+        $topic_id = $request->query('topicId');
        
         $data = new stories;
 
@@ -282,10 +282,10 @@ class DeviceController extends Controller
 
     public function postComment(Request $request){
 
-        $message = $request->header('message');
-        $author_id = $request->header('authorId');
-        $author_name = $request->header('authorName');
-        $story_id = $request->header('storyId');
+        $message = $request->query('message');
+        $author_id = $request->query('authorId');
+        $author_name = $request->query('authorName');
+        $story_id = $request->query('storyId');
        
         $data = new comments;
 
@@ -305,7 +305,7 @@ class DeviceController extends Controller
     public function postLike(Request $request){
 
        
-        $liked_story = $request->header('likedStory');
+        $liked_story = $request->query('likedStory');
        
         $data = new likes;
 
@@ -322,8 +322,8 @@ class DeviceController extends Controller
 
     public function postFollow(request $request){
             
-            $following_user_id = $request->header('followingUserId');
-            $followed_user_id = $request->header('followedUserId');
+            $following_user_id = $request->query('followingUserId');
+            $followed_user_id = $request->query('followedUserId');
         
             $data = new follows;
     
