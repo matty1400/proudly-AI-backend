@@ -25,6 +25,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('user/{username?}/{password?}', [DeviceController::class, 'getUser']);
 Route::get('user/{id?}', [DeviceController::class, 'getUserById']);
+Route::get('user/{username?}', [DeviceController::class, 'getUserByName']);
+Route::get('stories/{userId?}', [DeviceController::class, 'getStoryByUserId']);
+Route::get('likes/{storyId?}', [DeviceController::class, 'getLikesByStoryId']);
+Route::get('comments/{storyId?}', [DeviceController::class, 'getCommentsByStoryId']);
+Route::get('follows/{userId?}', [DeviceController::class, 'getFollowsByUserId']);
+Route::get('topics/{topicId?}', [DeviceController::class, 'getTopicById']);
+Route::get('topics', [DeviceController::class, 'getTopics']);
+
 
 
 
@@ -34,6 +42,9 @@ Route::get('user/{id?}', [DeviceController::class, 'getUserById']);
 
 //POST REQUESTS
 Route::post('user', [DeviceController::class, 'postUser']);
+Route::post('stories', [DeviceController::class, 'postStory']);
+Route::post('likes', [DeviceController::class, 'postLike']);
+Route::post('comments', [DeviceController::class, 'postComment']);
 
 
 

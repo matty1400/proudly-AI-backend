@@ -195,6 +195,15 @@ class DeviceController extends Controller
 
     }
 
+    public function getTopics(Request $request){
+
+        $data = topics::all()->where('is_active', 1);
+        if($data->isEmpty()) {
+            $data = "topics not found";
+        }
+        return response()->json($data);
+    }
+
 
 
 
