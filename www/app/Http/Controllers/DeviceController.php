@@ -103,11 +103,11 @@ class DeviceController extends Controller
         if ($user_id) {
             $data = stories::all()->where('user_id', $user_id)->where('is_active', 1);
             if($data->isEmpty()) {
-                $data = "user not found";
+                $data = "story not found";
             }
         }
         else{
-            $data = "user not found";
+            $data = "story not found";
         }
 
         return response()->json($data);
@@ -262,6 +262,10 @@ class DeviceController extends Controller
         $data->created_at = now();
         $data->updated_at = now();
         $data->is_active = 1;
+
+        $data->save();
+
+        return response()->json(['message' => 'Data added successfully']);
     }
 
     public function postComment(Request $request){
@@ -281,6 +285,9 @@ class DeviceController extends Controller
         $data->created_at = now();
         $data->updated_at = now();
         $data->is_active = 1;
+        $data->save();
+        return response()->json(['message' => 'Data added successfully']);
+
     }
 
     public function postLike(Request $request){
@@ -296,6 +303,9 @@ class DeviceController extends Controller
         $data->created_at = now();
         $data->updated_at = now();
         $data->is_active = 1;
+        $data->save();
+
+        return response()->json(['message' => 'Data added successfully']);
     }
 
 
