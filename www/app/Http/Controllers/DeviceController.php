@@ -129,7 +129,7 @@ class DeviceController extends Controller
             $data = "story not found";
         }
 
-        return response()->json($data);
+        return response()->$data;
 
         
 
