@@ -39,7 +39,7 @@ class DeviceController extends Controller
             $username = $request->query('username');
             $password = $request->query('password');
         }
-        $password = hash("sha256", $password+$this->salt);
+        $password = hash("sha256", $password.$this->salt);
         $data = users::where('username', $username)
                      ->where('password', $password)
                      ->where('is_active', 1)
@@ -223,7 +223,7 @@ class DeviceController extends Controller
 
         $data->username = $username;
         $data->mail = $mail;
-        $data->password = hash("sha256",$password+$this->salt);
+        $data->password = hash("sha256",$password.$this->salt);
         $data->is_admin = 0;
         $data->created_at = now();
         $data->updated_at = now();
