@@ -3,41 +3,44 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\company_leads;
-use Illuminate\Http\Request;
-use App\Models\filter_industries;
-use App\Models\filter_headcount;
-use App\Models\filter_headquarter_location;
-use App\Models\filter_seniority;
-use App\Models\filter_function;
-use App\Models\people_search;
-use App\Models\people_leads;
-use App\Models\company_search;
+use App\Models\comments;
+use App\Models\topics;
+use App\Models\follows;
+use App\Models\stories;
 use App\Models\users;
-use App\Models\jobs;
+use App\Models\likes;
+
+
+use Illuminate\Http\Request;
+
+
+
 use Exception;
 use App\Mail\WelcomeMail;
 use GuzzleHttp\Client;
 
 use Illuminate\Support\Facades\Mail;
+$salt = "letsuprise";
 
 
 
 class DeviceController extends Controller
 {
+    public $salt = "letsuprise";
+    
     // GET REQUESTS
     public function getUser(Request $request){
 
-        $mail = $request->header('mail'); // Accessing the 'email' header
+        $username = $request->header('username'); // Accessing the 'email' header
         $password = $request->header('password'); // Accessing the 'password' header
 
-        if (!$mail || !$password) {
+        if (!$username || !$password) {
             // If header parameters are not provided, check query parameters
-            $mail = $request->query('mail');
+            $username = $request->query('username');
             $password = $request->query('password');
         }
-        $password = hash("sha256", $password);
-        $data = users::where('mail', $mail)
+        $password = hash("sha256", $password+$this->salt);
+        $data = users::where('username', $username)
                      ->where('password', $password)
                      ->where('is_active', 1)
                      ->first();
@@ -49,184 +52,16 @@ class DeviceController extends Controller
         }
     }
 
+    public function getUserById(Request $request){
 
-    public function getIdByIndustry(Request $request)
-    {
-        $name = $request->header('name'); // Accessing the 'name' header
-        if (!$name) {
-            // If header parameters are not provided, check query parameters
-            $name = $request->query('name');
-        }
-        if ($name) {
-            $data = filter_industries::where('industry_name', $name)->where('is_active', 1)->select('ID')->first();
-        }
-        else {
-            $data = filter_industries::all('ID');
-        }
-
-        return response()->json($data);
-    }
-    public function getCompanySearchById(Request $request){
-        $id = $request->header('id'); // Accessing the 'id' header
-        if (!$id) {
-            // If header parameters are not provided, check query parameters
-            $id = $request->query('id');
-        }
-        $data = company_search::where('id', $id)->first();
-        return response()->json($data);
-    }
-    public function getPeopleSearchById(Request $request){
-        $id = $request->header('id'); // Accessing the 'id' header
-        if (!$id) {
-            // If header parameters are not provided, check query parameters
-            $id = $request->query('id');
-        }
-        $data = people_search::where('id', $id)->first();
-        return response()->json($data);
-    }
-
-    public function getIndustryNames()
-    {
-        $data = filter_industries::all('industry_name', 'ID');
-        return response()->json($data);
-    }
-    public function getHeadcount()
-    {
-        $data = filter_headcount::all('headcount_interval');
-        return response()->json($data);
-    }
-
-    public function getIdByHeadcount(Request $request)
-    {
-        $interval = $request->header('interval'); // Accessing the 'interval' header
-        if (!$interval) {
-            // If header parameters are not provided, check query parameters
-            $interval = $request->query('interval');
-        }
-        if ($interval) {
-            $data = filter_headcount::where('headcount_interval', $interval)->where('is_active', 1)->select('ID')->first();
-        }
-        else {
-            $data = filter_headcount::all('ID');
-        }
-
-        return response()->json($data);
-
-
-
-
-
-    }
-
-    public function getHeadquarters()
-    {
-        $data = filter_headquarter_location::all('industry_name');
-        return response()->json($data);
-    }
-
-    public function getIdByHeadquarters(Request $request)
-    {
-        $name = $request->header('name'); // Accessing the 'name' header
-        if (!$name) {
-            // If header parameters are not provided, check query parameters
-            $name = $request->query('name');
-        }
-        if ($name) {
-            $data = filter_headquarter_location::where('industry_name', $name)->where('is_active', 1)->select('ID')->first();
-        }
-        else {
-            $data = filter_headquarter_location::all('ID');
-        }
-
-        return response()->json($data);
-    }
-
-
-    public function getIdBySeniority(request $request)
-    {
-        $name = $request->header('name'); // Accessing the 'name' header
-        if (!$name) {
-            // If header parameters are not provided, check query parameters
-            $name = $request->query('name');
-        }
-        if ($name) {
-            $data = filter_seniority::where('seniority_name', $name)->where('is_active', 1)->select('ID')->first();
-        }
-        else {
-            $data = filter_seniority::all('ID', 'seniority_name');
-        }
-
-        return response()->json($data);
-    }
-
-    public function getIdByFunction(Request $request)
-    {
-        $name = $request->header('name'); // Accessing the 'name' header
-        if (!$name) {
-            // If header parameters are not provided, check query parameters
-            $name = $request->query('name');
-        }
-        if ($name) {
-            $data = filter_function::where('function_name', $name)->where('is_active', 1)->select('ID')->first();
-        }
-        else {
-            $data = filter_function::all('ID', 'function_name');
-        }
-
-        return response()->json($data);
-    }
-
-
-    public function getCompanySearchByUserId(request $request)
-    {
         $user_id = $request->header('userId'); // Accessing the 'user_id' header
+
         if (!$user_id) {
             // If header parameters are not provided, check query parameters
             $user_id = $request->query('userId');
         }
         if ($user_id) {
-            $data = company_search::all()->where('user_id', $user_id)->where('is_active', 1);
-            if($data->isEmpty()) {
-                $data = "user not found";
-            }
-        }
-        else{
-            $data = "user not found";
-        }
-
-
-        return response()->json($data);
-    }
-
-    public function getCompanyLeadsBySearchId(request $request)
-    {
-        $search_id = $request->header('searchId'); // Accessing the 'search_id' header
-        if (!$search_id) {
-            // If header parameters are not provided, check query parameters
-            $search_id = $request->query('searchId');
-        }
-        if ($search_id) {
-            $data = company_leads::all()->where('search_id', $search_id)->where('is_active', 1);
-            if($data->isEmpty()) {
-                $data = "search not found";
-            }
-        }
-        else{
-            $data = "search not found";
-        }
-
-        return response()->json($data);
-    }
-
-    public function getPeopleSearchByUserId(request $request){
-        $user_id = $request->header('userId'); // Accessing the 'user_id' header
-        if (!$user_id) {
-            // If header parameters are not provided, check query parameters
-            $user_id = $request->query('userId');
-        }
-
-        if ($user_id) {
-            $data = people_search::all()->where('user_id', $user_id)->where('is_active', 1);
+            $data = users::all()->where('id', $user_id)->where('is_active', 1);
             if($data->isEmpty()) {
                 $data = "user not found";
             }
@@ -238,31 +73,132 @@ class DeviceController extends Controller
         return response()->json($data);
     }
 
-    public function getPeopleLeadsBySearchId(request $request){
-        $search_id = $request->header('searchId'); // Accessing the 'search_id' header
-        if (!$search_id) {
+    public function getUserByName(Request $request){
+
+        $username = $request->header('username'); // Accessing the 'username' header
+
+        if (!$username) {
             // If header parameters are not provided, check query parameters
-            $search_id = $request->query('searchId');
+            $username = $request->query('username');
         }
-        if ($search_id) {
-            $data = people_leads::all()->where('search_id', $search_id)->where('is_active', 1);
+        if ($username) {
+            $data = users::all()->where('username', $username)->where('is_active', 1);
             if($data->isEmpty()) {
-                $data = "search not found";
+                $data = "user not found";
             }
         }
         else{
-            $data = "search not found";
+            $data = "user not found";
         }
 
         return response()->json($data);
     }
 
-    public function getCurrentJobStatus(){
-        // $data = jobs::where('ID', jobs::max('ID'))->select('job_status')->first();
-        // return response()->json($data);
-        return "test";
+    public function getStoryByUserId(request $request){
+        $user_id = $request->header('userId'); // Accessing the 'user_id' header
+        if (!$user_id) {
+            // If header parameters are not provided, check query parameters
+            $user_id = $request->query('userId');
+        }
+        if ($user_id) {
+            $data = stories::all()->where('user_id', $user_id)->where('is_active', 1);
+            if($data->isEmpty()) {
+                $data = "user not found";
+            }
+        }
+        else{
+            $data = "user not found";
+        }
+
+        return response()->json($data);
+    }
+
+    public function getLikesByStoryId(request $request){
+        $story_id = $request->header('storyId'); // Accessing the 'story_id' header
+        if (!$story_id) {
+            // If header parameters are not provided, check query parameters
+            $story_id = $request->query('storyId');
+        }
+        if ($story_id) {
+            $data = likes::all()->where('liked_story', $story_id)->where('is_active', 1);
+            if($data->isEmpty()) {
+                $data = "story not found";
+            }
+        }
+        else{
+            $data = "story not found";
+        }
+
+        return response()->json($data);
+
+        
+
 
     }
+
+    public function getFollowsByUserId(request $request){
+        $user_id = $request->header('userId'); // Accessing the 'user_id' header
+        if (!$user_id) {
+            // If header parameters are not provided, check query parameters
+            $user_id = $request->query('userId');
+        }
+        if ($user_id) {
+            $data = follows::all('followed_user_id')->where('following_user_id', $user_id)->where('is_active', 1);
+            if($data->isEmpty()) {
+                $data = "user not found";
+            }
+        }
+        else{
+            $data = "user not found";
+        }
+
+        return response()->json($data);
+    }
+
+    public function getCommentsByStoryId(Request $request){
+
+        $story_id = $request->header('storyId'); // Accessing the 'story_id' header
+
+        if (!$story_id) {
+            // If header parameters are not provided, check query parameters
+            $story_id = $request->query('storyId');
+        }
+        if ($story_id) {
+            $data = comments::all()->where('story_id', $story_id)->where('is_active', 1);
+            if($data->isEmpty()) {
+                $data = "story not found";
+            }
+        }
+        else{
+            $data = "story not found";
+        }
+
+    }
+
+    public function getTopicById(Request $request){
+
+        $topic_id = $request->header('topicId'); // Accessing the 'topic_id' header
+
+        if (!$topic_id) {
+            // If header parameters are not provided, check query parameters
+            $topic_id = $request->query('topicId');
+        }
+        if ($topic_id) {
+            $data = topics::all()->where('id', $topic_id)->where('is_active', 1);
+            if($data->isEmpty()) {
+                $data = "topic not found";
+            }
+        }
+        else{
+            $data = "topic not found";
+        }
+
+    }
+
+
+
+
+    
  
 
    
@@ -273,80 +209,21 @@ class DeviceController extends Controller
     // POST REQUESTS
 
 
-    public function newCompanyLeads(Request $request){
+   
 
-        $search_id = $request->header('search_id');
-        $name = $request->header('name');
-        $company_url = $request->header('company_url');
-        $description = $request->header('description');
-        $company_id = $request->header('company_id');
-
-        $headcount = $request->header('headcount');
-
-        $data = new company_leads;
-        $data->search_id = $search_id;
-        $data->name = $name;
-        $data->company_url = $company_url;
-        $data->description = $description;
-        $data->company_id = $company_id;
-
-        $data->headcount = $headcount;
-        $data->created_at = now();
-        $data->updated_at = now();
-        $data->is_active = 1;
-        $data->save();
-
-        return response()->json(['message' => 'Data added successfully']);
-    }
-
-    public function newPeopleLeads(Request $request){
-
-            $full_name = $request->header('full_name');
-            $company_name = $request->header('company_name');
-            $company_id = $request->header('company_id');
-            $regular_company_url = $request->header('regular_company_url');
-
-
-            $title = $request->header('title');
-            $mail = $request->header('mail');
-            $person_url = $request->header('person_url');
-            $connection_degree = $request->header('connection_degree');
-            $company_location = $request->header('company_location');
-            $person_location = $request->header('person_location');
-            $search_id = $request->header('search_id');
-
-
-            $data = new people_leads;
-            $data->search_id = $search_id;
-            $data->company_name = $company_name;
-            $data->company_id = $company_id;
-            $data->regular_company_url = $regular_company_url;
-            $data->full_name = $full_name;
-            $data->person_url = $person_url;
-            $data->title = $title;
-            $data->mail = $mail;
-            $data->connection_degree = $connection_degree;
-            $data->company_location = $company_location;
-            $data->person_location = $person_location;
-            $data->created_at = now();
-            $data->updated_at = now();
-            $data->is_active = 1;
-
-            $data->save();
-
-        return response()->json(['message' => 'Data added successfully']);
-    }
+   
    public function postUser(Request $request){
 
         $username = $request->header('username');
-        $mail = $request->header('mail');
         $password = $request->header('password');
+        $mail = $request->header('mail');
+        
 
         $data = new users;
 
         $data->username = $username;
         $data->mail = $mail;
-        $data->password = hash("sha256",$password);
+        $data->password = hash("sha256",$password+$this->salt);
         $data->is_admin = 0;
         $data->created_at = now();
         $data->updated_at = now();
@@ -354,241 +231,69 @@ class DeviceController extends Controller
 
 
         $data->save();
-        $this->sendWelcomeEmail($mail,$username);
+        // $this->sendWelcomeEmail($mail,$username);
 
         return response()->json(['message' => 'Data added successfully']);
     }
-    public function newCompanySearch(Request $request){
 
+    public function postStory(Request $request){
+
+        $title = $request->header('title');
+        $body = $request->header('body');
         $user_id = $request->header('userId');
-        $anual_revenue = $request->header('anual_revenue');
-        $headcount = $request->header('headcount');
-        $industry = $request->header('industry');
-        $geography = $request->header('geography');
-
-        $data = new company_search;
-
-        $data->user_id = $user_id;
-        $data->anual_revenue = $anual_revenue;
-        $data->headcount = $headcount;
-        $data->industry = $industry;
-        $data->geography = $geography;
-        $data->created_at = now();
-        $data->updated_at = now();
-        $data->is_active = 1;
-
-        $data->save();
-
-        $primary_key = $data->getKey();
-
-        $data = new jobs;
-        $data->company_search_id = $primary_key;
-        $data->save();
-
-
-        return response()->json(['company_search' => $primary_key]);
-    }
-    public function newPeopleSearch(Request $request){
-        $user_id = $request->header('userId');
-        $industry = $request->header('industry');
-        $geography = $request->header('geography');
-        $headcount = $request->header('headcount');
-
-        $job_function = $request->header('function');
-        $job_seniority = $request->header('seniority');
+        $topic_id = $request->header('topicId');
        
+        $data = new stories;
 
-        $data = new people_search;
+        $data->title = $title;
+        $data->body = $body;
         $data->user_id = $user_id;
-        $data->industry = $industry;
-        $data->geography = $geography;
-        $data->headcount = $headcount;
-        $data->function = $job_function;
-        $data->seniority = $job_seniority;
+        $data->topic_id = $topic_id;
         
         $data->created_at = now();
         $data->updated_at = now();
         $data->is_active = 1;
-        $data->save();
+    }
 
-        $primary_key = $data->getKey();
-        $data = new jobs;
-        $data->people_search_id = $primary_key;
-        $data->save();
+    public function postComment(Request $request){
+
+        $message = $request->header('message');
+        $author_id = $request->header('authorId');
+        $author_name = $request->header('authorName');
+        $story_id = $request->header('storyId');
+       
+        $data = new comments;
+
+        $data->message = $message;
+        $data->author_id = $author_id;
+        $data->author_name = $author_name;
+        $data->story_id = $story_id;
         
-
-        return response()->json(['people_search_key' => $primary_key]);
-
+        $data->created_at = now();
+        $data->updated_at = now();
+        $data->is_active = 1;
     }
 
-    //phantom Buster requests
+    public function postLike(Request $request){
 
-    function updateAndLaunch(Request $request) {
+       
+        $liked_story = $request->header('likedStory');
+       
+        $data = new likes;
 
-        $address = $request->header('address');
-
-
-
-        $ch = curl_init();
-
-        curl_setopt($ch, CURLOPT_URL, 'https://api.phantombuster.com/api/v2/agents/launch');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, '{"id":"8697827096363829","argument":{"numberOfProfiles":100,"extractDefaultUrl":false,"removeDuplicateProfiles":false,"sessionCookie":"AQEDATA3wxABdl0-AAABiGx9LIsAAAGIkImwi04AVzuGOsXLRtVw1kf4d-04DH2GLfYOXzRxBo5HulFrQVsBS74RCATsoRr_tpu9-lEVfk8VoLiV7NAG8_L0oG5mC4Vs6yFU4yTN2Rv62fYICPIRyuNt","searches":"' . $address . '"}}');
-
-        $headers = array();
-        $headers[] = 'Content-Type: application/json';
-        $headers[] = 'X-Phantombuster-Key: tvKJdE1a7UnxDkVpbj6p4Ju6wOlbP4LVhVgitqfPCEc';
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
-        $result = curl_exec($ch);
-        if (curl_errno($ch)) {
-            echo 'Error:' . curl_error($ch);
-        }
-        curl_close($ch);
-
-
+        $data->liked_story = $liked_story;
+        
+        
+        $data->created_at = now();
+        $data->updated_at = now();
+        $data->is_active = 1;
     }
 
-
-    // Fetcher function
-    function fetcher() {
-        $data= jobs::where('ID', jobs::max('ID'))->select('job_status')->first();
-        if($data->company_search_id != null){
-            $search_id = $data->company_search_id;
-            $type = "company";
-            return $search_id;
-        }
-        else{
-            $search_id = $data->people_search_id;
-            $type = "people";
-        }
-
-
-     
-
-
-        // require_once('vendor/autoload.php');
-
-        $client = new \GuzzleHttp\Client();
-
-        $response = $client->request('GET', 'https://api.phantombuster.com/api/v2/agents/fetch?id=8697827096363829', [
-        'headers' => [
-            'X-Phantombuster-Key' => 'tvKJdE1a7UnxDkVpbj6p4Ju6wOlbP4LVhVgitqfPCEc',
-            'accept' => 'application/json',
-        ],
-        ]);
-
-        $responseBody = json_decode($response->getBody(), true);
-
-        // Store the s3Folder and orgs3Folder values in variables
-        $s3Folder = $responseBody['s3Folder'];
-        $orgs3Folder = $responseBody['orgS3Folder'];
-
-        // You can do further processing or return the values as needed
-
-        $url = "https://phantombuster.s3.amazonaws.com/{$orgs3Folder}/{$s3Folder}/result.json";
-
-        $data = file_get_contents($url);
-
-        if ($data === false) {
-            // Error handling if the request fails
-            echo "Failed to fetch data from the URL.";
-          } else {
-            $jsonData = json_decode($data);
-
-            if ($jsonData === null) {
-              // Error handling if JSON decoding fails
-              echo "Failed to decode JSON data.";
-            }
-            else {
-              // Process the decoded JSON data
-              try {
-                if($type=="company"){
-                foreach ($jsonData as $data) {
-                    $companyId = $data->companyId;
-                    $companyName = $data->companyName;
-                    $description = $data->description;
-                    $companyUrl = $data->companyUrl;
-                    $headcount = $data->employeeCountRange;
-
-
-                    $companyLead = new company_leads();
-                    $companyLead->company_id = $companyId;
-                    $companyLead->name = $companyName;
-                    $companyLead->description = $description;
-                    $companyLead->company_url = $companyUrl;
-                    $companyLead->headcount = $headcount;
-                    $companyLead->search_id = $search_id;
-                    $companyLead->created_at = now();
-                    $companyLead->updated_at = now();
-                    $companyLead->is_active = 1;
-
-                    $companyLead->save();
-                }}
-                if($type=="people"){
-                    foreach ($jsonData as $record) {
-
-
-                        if (!isset($record->companyId) || !isset($record->regularCompanyUrl)) {
-                            continue; // Skip this record if companyId or regularCompanyUrl is missing
-                        }
-                        $peopleLead = new people_leads();
-
-
-                        $peopleLead->full_name = $record->fullName;
-                        $peopleLead->company_name = $record->companyName;
-                        $peopleLead->company_id = $record->companyId;
-                        $peopleLead->regular_company_url = $record->regularCompanyUrl;
-                        $peopleLead->title = $record->title;
-                        $peopleLead->mail = isset($record->mail) ? $record->mail : null;
-                        $peopleLead->person_url = $record->profileUrl;
-                        $peopleLead->connection_degree = $record->connectionDegree;
-                        $peopleLead->company_location = $record->companyLocation;
-                        $peopleLead->person_location = $record->location;
-                        $peopleLead->search_id = $search_id; // Change this value to the appropriate search ID
-                        $peopleLead->created_at = now();
-                        $peopleLead->updated_at = now();
-                        $peopleLead->is_active = 1;
-
-                        $peopleLead->save();
-                }
-
-            }
-                else{
-                    echo "No data found";
-                }
-
-                echo "Data inserted successfully!";
-            }
-            catch (Exception $e) {
-                echo "Error: " . $e->getMessage();
-            }
-            }
-          }
-
-
-    }
 
     //DElete LEADS
 
-    public function deleteCompanyLeads(Request $request){
-        $id = $request->header('id');
-        company_leads::where('id',$id)->update(['is_active'=>0]);
-        
-        return response()->json(['message' => 'Company Lead Deleted Successfully']);
-    }
-    public function deletePeopleLeads(Request $request){
-        $id = $request->header('id');
-        // if(!$id){
-        //     $id = $request->query('id');
-        // }
-        
-        people_leads::where('id',$id)->update(['is_active'=>0]);
-        
-        return response()->json(['message' => 'People Lead Deleted Successfully']);
-
-    }   
+    
+    
 
     public function sendWelcomeEmail($email, $name)
     {
