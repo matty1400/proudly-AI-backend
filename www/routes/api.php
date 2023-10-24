@@ -32,6 +32,7 @@ Route::get('comments/{storyId?}', [DeviceController::class, 'getCommentsByStoryI
 Route::get('follows/{userId?}', [DeviceController::class, 'getFollowsByUserId']);
 Route::get('topics/id/{topicId?}', [DeviceController::class, 'getTopicById']);
 Route::get('topics', [DeviceController::class, 'getTopics']);
+Route::get('topics/current', [DeviceController::class, 'getCurrentTopic']);
 
 
 
@@ -46,6 +47,7 @@ Route::post('stories', [DeviceController::class, 'postStory']);
 Route::post('likes', [DeviceController::class, 'postLike']);
 Route::post('comments', [DeviceController::class, 'postComment']);
 Route::post('follows', [DeviceController::class, 'postFollow']);
+Route::post('topics/current', [DeviceController::class, 'postCurrentTopic']);
 
 
 

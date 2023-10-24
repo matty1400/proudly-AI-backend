@@ -9,6 +9,7 @@ use App\Models\follows;
 use App\Models\stories;
 use App\Models\users;
 use App\Models\likes;
+use App\Models\currentTopic;
 
 
 use Illuminate\Http\Request;
@@ -206,6 +207,15 @@ class DeviceController extends Controller
         return response()->json($data);
     }
 
+    public function getCurrentTopic( Request $request){
+
+        $data = CurrentTopic::orderBy('id', 'desc')->first();
+    if (!$data) {
+        $data = "Topic not found";
+    }
+    return response()->json($data);
+    }
+
 
 
 
@@ -327,6 +337,14 @@ class DeviceController extends Controller
             $data->save();
     
             return response()->json(['message' => 'Data added successfully']);
+    }
+
+    public function postCurrentTopic(Request $request){
+        $topic_id = $request->header('topicId');
+        $data = new currentTopic;
+        $data->topicId = $topic_id;
+        $data->save();
+        return response()->json(['message' => 'Data added successfully']);
     }
 
 
