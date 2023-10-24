@@ -120,9 +120,9 @@ class DeviceController extends Controller
             $story_id = $request->query('storyId');
         }
         if ($story_id) {
-            $data = likes::all()->where('liked_story', $story_id)->where('is_active', 1);
-            if($data->isEmpty()) {
-                $data = "story not found";
+            $data = likes::all()->where('liked_story', $story_id)->where('is_active', 1)->count();
+            if($data =  0) {
+                $data = " no likes";
             }
         }
         else{
@@ -172,6 +172,7 @@ class DeviceController extends Controller
         else{
             $data = "story not found";
         }
+        return response()->json($data);
 
     }
 
@@ -192,6 +193,7 @@ class DeviceController extends Controller
         else{
             $data = "topic not found";
         }
+        return response()->json($data);
 
     }
 
@@ -306,6 +308,25 @@ class DeviceController extends Controller
         $data->save();
 
         return response()->json(['message' => 'Data added successfully']);
+    }
+
+    public function postFollow(request $request){
+            
+            $following_user_id = $request->header('followingUserId');
+            $followed_user_id = $request->header('followedUserId');
+        
+            $data = new follows;
+    
+            $data->following_user_id = $following_user_id;
+            $data->followed_user_id = $followed_user_id;
+            
+            
+            $data->created_at = now();
+            $data->updated_at = now();
+            $data->is_active = 1;
+            $data->save();
+    
+            return response()->json(['message' => 'Data added successfully']);
     }
 
 

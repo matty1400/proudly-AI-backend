@@ -45,6 +45,7 @@ Route::post('user', [DeviceController::class, 'postUser']);
 Route::post('stories', [DeviceController::class, 'postStory']);
 Route::post('likes', [DeviceController::class, 'postLike']);
 Route::post('comments', [DeviceController::class, 'postComment']);
+Route::post('follows', [DeviceController::class, 'postFollow']);
 
 
 
