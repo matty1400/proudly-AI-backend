@@ -235,9 +235,9 @@ class DeviceController extends Controller
    
    public function postUser(Request $request){
 
-        $username = $request->header('username');
-        $password = $request->header('password');
-        $mail = $request->header('mail');
+        $username = $request->query('username');
+        $password = $request->query('password');
+        $mail = $request->query('mail');
         
 
         $data = new users;
@@ -340,7 +340,7 @@ class DeviceController extends Controller
     }
 
     public function postCurrentTopic(Request $request){
-        $topic_id = $request->header('topicId');
+        $topic_id = $request->query('topicId');
         $data = new currentTopic;
         $data->topicId = $topic_id;
         $data->save();
