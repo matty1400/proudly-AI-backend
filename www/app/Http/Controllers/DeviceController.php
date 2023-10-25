@@ -233,27 +233,37 @@ class DeviceController extends Controller
    
 
    
-   public function postUser(Request $request){
+    public function postUser(Request $request){
 
+        // Check if parameters are in the query string
         $username = $request->query('username');
         $password = $request->query('password');
         $mail = $request->query('mail');
-        
-
+    
+        // If parameters are not in the query string, check the request body (JSON or form data)
+        if (empty($username) || empty($password) || empty($mail)) {
+            $username = $request->input('username');
+            $password = $request->input('password');
+            $mail = $request->input('mail');
+        }
+    
+        // Check if parameters are still not available, return an error response
+        if (empty($username) || empty($password) || empty($mail)) {
+            return response()->json(['error' => 'Missing or invalid parameters'], 400);
+        }
+    
         $data = new users;
-
+    
         $data->username = $username;
         $data->mail = $mail;
-        $data->password = hash("sha256",$password.$this->salt);
+        $data->password = hash("sha256", $password.$this->salt);
         $data->is_admin = 0;
         $data->created_at = now();
         $data->updated_at = now();
         $data->is_active = 1;
-
-
+    
         $data->save();
-        // $this->sendWelcomeEmail($mail,$username);
-
+    
         return response()->json(['message' => 'Data added successfully']);
     }
 
