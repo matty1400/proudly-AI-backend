@@ -24,6 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // GET REQUESTS
 
 Route::get('user', [DeviceController::class, 'getUser']);
+Route::get('user/all', [DeviceController::class, 'getAllUsers']);
 Route::get('user/id/{id?}', [DeviceController::class, 'getUserById']);
 Route::get('user/username/{username?}', [DeviceController::class, 'getUserByName']);
 Route::get('stories/{userId?}', [DeviceController::class, 'getStoryByUserId']);
@@ -33,6 +34,7 @@ Route::get('follows/{userId?}', [DeviceController::class, 'getFollowsByUserId'])
 Route::get('topics/id/{topicId?}', [DeviceController::class, 'getTopicById']);
 Route::get('topics', [DeviceController::class, 'getTopics']);
 Route::get('topics/current', [DeviceController::class, 'getCurrentTopic']);
+
 
 
 

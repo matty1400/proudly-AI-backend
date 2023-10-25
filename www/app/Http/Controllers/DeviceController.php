@@ -216,6 +216,15 @@ class DeviceController extends Controller
     return response()->json($data);
     }
 
+    public function getAllUsers( Request $request){
+
+        $data = users::all();
+        if($data->isEmpty()) {
+            $data = "users not found";
+        }
+        return response()->json($data);
+    }
+
 
 
 
