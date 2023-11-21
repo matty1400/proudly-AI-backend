@@ -279,14 +279,14 @@ class DeviceController extends Controller
     public function postStory(Request $request){
 
         $title = $request->query('title');
-        $body = $request->query('body');
+        $body = $request->query('content');
         $user_id = $request->query('userId');
         $topic_id = $request->query('topicId');
        
         $data = new stories;
 
         $data->title = $title;
-        $data->body = $body;
+        $data->content = $body;
         $data->user_id = $user_id;
         $data->topic_id = $topic_id;
         
