@@ -225,27 +225,30 @@ class DeviceController extends Controller
         return response()->json($data);
     }
 
-    public function getFollowedStories( Request $request){
-
-        $user_id = $request->header('userId'); // Accessing the 'user_id' header
+    public function getFollowedStories(Request $request) {
+        $user_id = $request->header('userId') ?? $request->query('userId'); // Using null coalescing operator
+    
         if (!$user_id) {
-            // If header parameters are not provided, check query parameters
-            $user_id = $request->query('userId');
+            return response()->json(["error" => "User not found"], 404);
         }
-        if ($user_id) {
-            $data = follows::all('following_user_id')->where('following_user_id', $user_id)->where('is_active', 1);
-            foreach($data as $followed_user_id){
-                $followed_user_id = $followed_user_id->following_user_id;
-                $stories = stories::all()->where('user_id', $followed_user_id)->where('is_active', 1);
-                $data = $data->merge($stories);
-            }
+    
+        // Get the list of followed user IDs
+        $followedUserIds = Follows::where('following_user_id', $user_id)
+            ->where('is_active', 1)
+            ->pluck('followed_user_id');
+    
+        if ($followedUserIds->isEmpty()) {
+            return response()->json(["message" => "No followed users found"], 200);
         }
-        else{
-            $data = "user not found";
-        }
-
-        return response()->json($data);
+    
+        // Get stories of the followed users
+        $stories = Stories::whereIn('user_id', $followedUserIds)
+            ->where('is_active', 1)
+            ->get();
+    
+        return response()->json($stories);
     }
+    
 
 
 
