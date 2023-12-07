@@ -227,10 +227,7 @@ class DeviceController extends Controller
 
     public function getFollowedStories(Request $request) {
         $user_id =  $request->query('userId'); // Using null coalescing operator
-        if ($user_id) {
-            return response()->json(["error" => "User found"], 404);
-        }
-    
+        
         if (!$user_id) {
             return response()->json(["error" => "User noffft found"], 404);
         }
