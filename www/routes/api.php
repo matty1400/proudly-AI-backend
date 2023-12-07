@@ -44,6 +44,7 @@ Route::get('follows/stories/{userId?}', [DeviceController::class, 'getFollowedSt
 
 
 
+
 //POST REQUESTS
 Route::post('user', [DeviceController::class, 'postUser']);
 Route::post('stories', [DeviceController::class, 'postStory']);
