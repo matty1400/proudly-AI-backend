@@ -232,7 +232,7 @@ class DeviceController extends Controller
         }
     
         if (!$user_id) {
-            return response()->json(["error" => "User not found"], 404);
+            return response()->json(["error" => "User noffft found"], 404);
         }
     
         // Get the list of followed user IDs
