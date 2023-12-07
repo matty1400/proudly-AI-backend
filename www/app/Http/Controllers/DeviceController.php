@@ -225,6 +225,28 @@ class DeviceController extends Controller
         return response()->json($data);
     }
 
+    public function getFollowedStories( Request $request){
+
+        $user_id = $request->header('userId'); // Accessing the 'user_id' header
+        if (!$user_id) {
+            // If header parameters are not provided, check query parameters
+            $user_id = $request->query('userId');
+        }
+        if ($user_id) {
+            $data = follows::all('following_user_id')->where('following_user_id', $user_id)->where('is_active', 1);
+            foreach($data as $followed_user_id){
+                $followed_user_id = $followed_user_id->following_user_id;
+                $stories = stories::all()->where('user_id', $followed_user_id)->where('is_active', 1);
+                $data = $data->merge($stories);
+            }
+        }
+        else{
+            $data = "user not found";
+        }
+
+        return response()->json($data);
+    }
+
 
 
 
