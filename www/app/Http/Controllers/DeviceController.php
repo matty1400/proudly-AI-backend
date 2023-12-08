@@ -233,11 +233,11 @@ class DeviceController extends Controller
         if ($user_id) {
             $data = follows::all('followed_user_id')->where('following_user_id', $user_id)->where('is_active', 1);
             if($data->isEmpty()) {
-                $data = "user not found";
+                $data = "user not foundsii";
             }
         }
         else{
-            $data = "user not found";
+            $data = "user not foundttt";
         }
 
         return response()->json($data);
