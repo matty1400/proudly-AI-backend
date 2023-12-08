@@ -224,20 +224,21 @@ class DeviceController extends Controller
         }
         return response()->json($data);
     }
-    public function getFollowerId(Request $request) {
-        $user_id = $request->header('userId') ?? $request->query('userId'); // Using null coalescing operator
+    public function getFollowingUsers(Request $request) {
+        $user_id = $request->header('userId') ?? $request->query('userId');
     
         if (!$user_id) {
-            return response()->json(["error" => "User not found"], 404);
+            return response()->json(["error" => "User ID not provided"], 400);
         }
     
-        // Get the list of follower user IDs
-        $followerUserIds = Follows::where('followed_user_id', $user_id)
+        // Get the list of followed user IDs
+        $followingUserIds = Follows::where('following_user_id', $user_id)
             ->where('is_active', 1)
-            ->pluck('following_user_id');
+            ->pluck('followed_user_id');
     
-        return response()->json($followerUserIds);
+        return response()->json($followingUserIds);
     }
+    
     
 
     public function getFollowedStories(Request $request) {
