@@ -19,7 +19,7 @@ use Illuminate\Http\Request;
 use Exception;
 use App\Mail\WelcomeMail;
 use GuzzleHttp\Client;
-
+use GuzzleHttp\Psr7\Request as Psr7Request;
 use Illuminate\Support\Facades\Mail;
 $salt = "letsuprise";
 
@@ -237,6 +237,34 @@ class DeviceController extends Controller
             ->pluck('followed_user_id');
     
         return response()->json($followingUserIds);
+    }
+    public function getFollowerNames(Request $request){
+        $user_id = $request->header('userId') ?? $request->query('userId');
+    
+        if (!$user_id) {
+            return response()->json(["error" => "User ID not provided"], 400);
+        }
+    
+        // Get the list of followed user IDs
+        $followedUserIds = Follows::where('following_user_id', $user_id)
+            ->where('is_active', 1)
+            ->pluck('followed_user_id');
+
+        if ($followedUserIds->isEmpty()) {
+            return response()->json(["message" => "No followed users found"], 200);
+        }
+
+        $names = Users::whereIn('id', $followedUserIds)
+        ->where('is_active', 1)
+        ->get('username'); // Replace 'column1', 'column2' with the actual columns you need
+    
+        return response()->json($names);
+
+        
+        
+
+        
+    
     }
     
     

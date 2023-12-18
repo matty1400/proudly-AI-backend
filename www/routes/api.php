@@ -36,7 +36,7 @@ Route::get('topics', [DeviceController::class, 'getTopics']);
 Route::get('topics/current', [DeviceController::class, 'getCurrentTopic']);
 Route::get('followerstories/{userId?}', [DeviceController::class, 'getFollowedStories']);
 Route::get('follower/{userId?}', [DeviceController::class, 'getFollowingUsers']);
-
+Route::get('followernames/{userId?}', [DeviceController::class, 'getFollowerNames']);
 
 
 
