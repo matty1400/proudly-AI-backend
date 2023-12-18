@@ -240,16 +240,15 @@ class DeviceController extends Controller
     }
     
     
-
     public function getFollowedStories(Request $request) {
-        $user_id =  $request->query('userId'); // Using null coalescing operator
+        $user_id = $request->header('userId') ?? $request->query('userId');
         
         if (!$user_id) {
-            return response()->json(["error" => "User noffft found"], 404);
+            return response()->json(["error" => "User not found"], 404);
         }
     
         // Get the list of followed user IDs
-        $followedUserIds = follows::where('following_user_id', $user_id)
+        $followedUserIds = Follows::where('following_user_id', $user_id)
             ->where('is_active', 1)
             ->pluck('followed_user_id');
     
@@ -257,13 +256,14 @@ class DeviceController extends Controller
             return response()->json(["message" => "No followed users found"], 200);
         }
     
-        // Get stories of the followed users
-        $stories = stories::whereIn('user_id', $followedUserIds)
+        // Get stories of the followed users without using get()
+        $stories = Stories::whereIn('user_id', $followedUserIds)
             ->where('is_active', 1)
-            ->get();
+            ->get(['title', 'content','user_id']); // Replace 'column1', 'column2' with the actual columns you need
     
         return response()->json($stories);
     }
+    
     
 
 
