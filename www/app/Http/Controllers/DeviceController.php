@@ -52,7 +52,7 @@ class DeviceController extends Controller
 
         if ($data) {
 
-            $this->sendWelcomeEmail($data->mail,$username);
+            // $this->sendWelcomeEmail($data->mail,$username);
             return response()->json($data);
         } else {
             return response()->json("user not found");
