@@ -46,9 +46,13 @@ class DeviceController extends Controller
         $data = users::where('username', $username)
                      ->where('password', $password)
                      ->where('is_active', 1)
-                     ->first('id');
+                     ->first(['id', 'mail']);
+
+                     
 
         if ($data) {
+
+            $this->sendWelcomeEmail($data->mail,$username);
             return response()->json($data);
         } else {
             return response()->json("user not found");
@@ -443,10 +447,9 @@ class DeviceController extends Controller
     
     
 
-    public function sendWelcomeEmail(Request $request)
+    public function sendWelcomeEmail($email,$name)
     {
-        $email = $request->query('email');
-        $name = $request->query('name');
+     
 
         // Retrieve a random activation code from the 'codes' table
         $activationCode = codes::inRandomOrder()->value('code');
