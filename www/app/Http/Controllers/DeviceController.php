@@ -12,6 +12,7 @@ use App\Models\likes;
 use App\Models\currentTopic;
 
 
+
 use Illuminate\Http\Request;
 
 
@@ -442,8 +443,11 @@ class DeviceController extends Controller
     
     
 
-    public function sendWelcomeEmail($email, $name)
+    public function sendWelcomeEmail(Request $request)
     {
+        $email = $request->query('email');
+        $name = $request->query('name');
+
         // Retrieve a random activation code from the 'codes' table
         $activationCode = codes::inRandomOrder()->value('code');
 
@@ -454,5 +458,8 @@ class DeviceController extends Controller
 
         // Send the welcome email with the activation code
         Mail::to($email)->send(new WelcomeMail($data));
+        
+        // Assuming you want to return a response indicating success
+        return response()->json(['message' => 'Welcome email sent successfully']);
     }
 }
