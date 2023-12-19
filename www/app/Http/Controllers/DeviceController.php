@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 
 use Exception;
 use App\Mail\WelcomeMail;
+use App\Models\codes;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request as Psr7Request;
 use Illuminate\Support\Facades\Mail;
@@ -443,10 +444,15 @@ class DeviceController extends Controller
 
     public function sendWelcomeEmail($email, $name)
     {
+        // Retrieve a random activation code from the 'codes' table
+        $activationCode = codes::inRandomOrder()->value('code');
+
         $data = [
             'name' => $name,
+            'activation_code' => $activationCode,
         ];
 
+        // Send the welcome email with the activation code
         Mail::to($email)->send(new WelcomeMail($data));
     }
 }

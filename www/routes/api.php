@@ -39,6 +39,10 @@ Route::get('follower/{userId?}', [DeviceController::class, 'getFollowingUsers'])
 Route::get('followernames/{userId?}', [DeviceController::class, 'getFollowerNames']);
 
 
+Route::get('/send-welcome-email/{email}/{name}', [DeviceController::class, 'sendWelcomeEmail']);
+
+
+
 
 
 

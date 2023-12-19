@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome Email</title>
 </head>
 <body>
-    <h1>Welcome to The Proudly Platform!</h1>
-    <p>Dear {{ $data['name'] }},</p>
-    <p>Welcome to the Proudly Sales Navigator! We are excited to have you on board.</p>
-    <p>Thank you for joining us.</p>
-    <p>Regards,<br>
-    The Proudly Team</p>
+    <p>Hello, {{ $name }}!</p>
+    <p>Welcome to StoryStreak. Your activation code is: {{ $activation_code }}</p>
+    <!-- Add more content as needed -->
 </body>
 </html>
