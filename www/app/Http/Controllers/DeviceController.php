@@ -448,22 +448,21 @@ class DeviceController extends Controller
     
 
     public function sendWelcomeEmail()
-    {
-     
-        $email = 'r0710990@student.thomasmore.be';
+{
+    $name = 'user1';
+    $email = 'r0710990@student.thomasmore.be';
+    // Retrieve a random activation code from the 'codes' table
+    $activationCode = codes::inRandomOrder()->value('code');
 
-        // Retrieve a random activation code from the 'codes' table
-        // $activationCode = codes::inRandomOrder()->value('code');
+    $data = [
+        'name' => $name,
+        'activation_code' => $activationCode,
+    ];
 
-        $data = [
-            'name' => 'yoyoy',
-            'activation_code' => '1234',
-        ];
+    // Send the welcome email with the activation code
+    Mail::to($email)->send(new WelcomeMail($data));
 
-        // Send the welcome email with the activation code
-        Mail::to($email)->send(new WelcomeMail($data));
-        
-        // Assuming you want to return a response indicating success
-        return response()->json(['message' => 'Welcome email sent successfully']);
-    }
+    // Assuming you want to return a response indicating success
+    return response()->json(['message' => 'Welcome email sent successfully']);
+}
 }

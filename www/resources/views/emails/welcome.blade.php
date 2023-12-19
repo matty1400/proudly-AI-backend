@@ -1,3 +1,5 @@
+<!-- resources/views/emails/welcome.blade.php -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,8 +8,9 @@
     <title>Welcome Email</title>
 </head>
 <body>
-    <p>Hello, !</p>
-    <p>Welcome to StoryStreak. Your activation code is: </p>
+    <p>Hello, {{ $data['name'] }}!</p>
+    <p>Welcome to YourAppName. Your activation code is: {{ $data['activation_code'] }}</p>
     <!-- Add more content as needed -->
 </body>
 </html>
+
