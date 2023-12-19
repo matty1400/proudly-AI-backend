@@ -7,9 +7,10 @@
 <body>
     <h1>Welcome to The Proudly Platform!</h1>
     <p>Dear {{ $data['name'] }},</p>
-    <p>Welcome to the Proudly Sales Navigator! We are excited to have you on board.</p>
+    <p>Welcome to StoryStreak, your code is {{ $data['activation'] }} We are excited to have you on board.</p>
     <p>Thank you for joining us.</p>
     <p>Regards,<br>
-    The Proudly Team</p>
+    The StoryStreak Team</p>
 </body>
 </html>
+
