@@ -6,7 +6,7 @@
     <title>Welcome Email</title>
 </head>
 <body>
-    <p>Hello, </p>
+    <p>Hello, {{ $name }}!</p>
     <p>Welcome to StoryStreak. Your activation code is: {{ $activation_code }}</p>
     <!-- Add more content as needed -->
 </body>
