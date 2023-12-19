@@ -23,6 +23,8 @@ use App\Models\codes;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request as Psr7Request;
 use Illuminate\Support\Facades\Mail;
+use User;
+
 $salt = "letsuprise";
 
 
@@ -347,6 +349,7 @@ class DeviceController extends Controller
         $data->is_active = 1;
     
         $data->save();
+        $this->sendWelcomeEmail($mail,$username);
     
         return response()->json(['message' => 'Data added successfully']);
     }
@@ -445,24 +448,29 @@ class DeviceController extends Controller
     //DElete LEADS
 
     
+    public function sendWelcomeEmail($email, $name)
+    {
+        $data = [
+            'name' => $name,
+        ];
+
+        Mail::to($email)->send(new WelcomeMail($data));
+    }
+
+public function deleteFriend(Request $request){
+    $user_id =$request->header('id');
+    if(!$user_id){
+        $name = $request->query('id');
+    } 
+    $name = $request->header('name');
+    if(!$name){
+        $name = $request->query('name');
+    }
+    $user = user::where('username',$name)->pluck('id');
+    follows::where('followed_user_id',$user)->update(['is_active'=>0]);
     
+    return response()->json(['message' => 'follow deleted']);
 
-    public function sendWelcomeEmail()
-{
-    $name = 'user1';
-    $email = 'r0710990@student.thomasmore.be';
-    // Retrieve a random activation code from the 'codes' table
-    $activationCode = codes::inRandomOrder()->value('code');
+}   
 
-    $data = [
-        'name' => $name,
-        'activation_code' => $activationCode,
-    ];
-
-    // Send the welcome email with the activation code
-    Mail::to($email)->send(new WelcomeMail($data));
-
-    // Assuming you want to return a response indicating success
-    return response()->json(['message' => 'Welcome email sent successfully']);
-}
 }

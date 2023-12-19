@@ -1,7 +1,5 @@
 <?php
 
-// WelcomeMail.php
-
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
@@ -13,19 +11,33 @@ class WelcomeMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $data;
+    public $data; // Add this line to declare the $data property
 
+    /**
+     * Create a new message instance.
+     *
+     * @param  array  $data
+     * @return void
+     */
     public function __construct($data)
     {
         $this->data = $data;
     }
 
+    /**
+     * Build the message.
+     *
+     * @return $this
+     */
     public function build()
     {
-        return $this->subject('Welcome to YourAppName')
-                    ->view('emails.welcome') // Create this Blade view
-                    ->from('storystreak@matijseraly.be', 'Your App Name');
+        return $this->subject('Welcome to Proudly Sales Navigator')
+                    ->view('emails.welcome')
+                    ->from('proudly@matijseraly.be', 'Proudly Sales Navigator')
+                    ->with([
+                        'data' => $this->data,
+                    ]);
+                    
     }
 }
-
 

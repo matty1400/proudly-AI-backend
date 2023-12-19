@@ -1,16 +1,15 @@
-<!-- resources/views/emails/welcome.blade.php -->
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
     <title>Welcome Email</title>
 </head>
 <body>
-    <p>Hello, {{ $data['name'] }}!</p>
-    <p>Welcome to YourAppName. Your activation code is: {{ $data['activation_code'] }}</p>
-    <!-- Add more content as needed -->
+    <h1>Welcome to The Proudly Platform!</h1>
+    <p>Dear {{ $data['name'] }},</p>
+    <p>Welcome to the Proudly Sales Navigator! We are excited to have you on board.</p>
+    <p>Thank you for joining us.</p>
+    <p>Regards,<br>
+    The Proudly Team</p>
 </body>
 </html>
-
