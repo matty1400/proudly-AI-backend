@@ -444,6 +444,23 @@ class DeviceController extends Controller
         return response()->json(['message' => 'Data added successfully']);
     }
 
+    public function checkActivationCode(Request $request)
+{
+    $activation_code = $request->input('code'); // Assuming activation_code is sent in the request body
+
+    // Check if the activation code exists in the codes table
+    $codeExists = codes::where('code', $activation_code)->exists();
+
+    if ($codeExists) {
+        // Activation code exists in the table
+        return response()->json(['message' => 'Activation code is valid']);
+    } else {
+        // Activation code does not exist in the table
+        return response()->json(['message' => 'Invalid activation code']);
+    }
+}
+
+
 
     //DElete LEADS
 

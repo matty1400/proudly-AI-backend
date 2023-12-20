@@ -40,6 +40,8 @@ Route::get('followernames/{userId?}', [DeviceController::class, 'getFollowerName
 
 Route::put("delete", [DeviceController::class, 'deleteFriend']);
 
+Route::get('codecheck', [DeviceController::class, 'checkActivationCode']);
+
 
 Route::get('sendmail', [DeviceController::class, 'sendWelcomeEmail']);
 
