@@ -39,7 +39,7 @@ return [
             'host' => "smtp-auth.mailprotect.be",
             'port' => 587,
             'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-            'username' =>  'proudly@matijseraly.be',
+            'username' =>  'storystreak@matijseraly.be',
             'password' =>  '123mippy',
             'timeout' => null,
             'local_domain' => env('MAIL_EHLO_DOMAIN'),
@@ -99,7 +99,7 @@ return [
     */
 
     'from' => [
-        'address' => "proudly@matijseraly.be",
+        'address' => "storystreak@matijseraly.be",
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
