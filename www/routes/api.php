@@ -42,6 +42,7 @@ Route::put("delete", [DeviceController::class, 'deleteFriend']);
 
 Route::get('codecheck', [DeviceController::class, 'checkActivationCode']);
 
+Route::get('mail', [DeviceController::class, 'sendWelcomeEmail']);
 
 Route::get('sendmail', [DeviceController::class, 'sendWelcomeEmail']);
 

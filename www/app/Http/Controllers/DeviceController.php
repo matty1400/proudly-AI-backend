@@ -465,8 +465,11 @@ class DeviceController extends Controller
     //DElete LEADS
 
     
-    public function sendWelcomeEmail($email, $name)
+    public function sendWelcomeEmail(Request $request)
     {
+        $email = $request->query('mail');
+        $name = $request->query('name');
+        
         $activation = Codes::inRandomOrder()->pluck('code')->first();
         $data = [
             'name' => $name,
