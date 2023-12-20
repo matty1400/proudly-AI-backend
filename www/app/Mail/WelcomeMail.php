@@ -33,7 +33,7 @@ class WelcomeMail extends Mailable
     {
         return $this->subject('Welcome to Proudly Sales Navigator')
                     ->view('emails.welcome')
-                    ->from('storystreak@matijseraly.be', 'Proudly Sales Navigator')
+                    ->from('proudly@matijseraly.be', 'Proudly Sales Navigator')
                     ->with([
                         'data' => $this->data,
                     ]);
