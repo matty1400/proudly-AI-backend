@@ -468,7 +468,7 @@ public function deleteFriend(Request $request){
     if(!$name){
         $name = $request->query('name');
     }
-    $user = user::where('username',$name)->pluck('id')->first();
+    $user = users::where('username',$name)->pluck('id')->first();
     follows::where('followed_user_id', $user)
     ->where('following_user_id', $user_id)
     ->update(['is_active' => 0]);
