@@ -446,7 +446,7 @@ class DeviceController extends Controller
 
     public function checkActivationCode(Request $request)
 {
-    $activation_code = $request->input('code'); // Assuming activation_code is sent in the request body
+    $activation_code = $request->query('code'); // Assuming activation_code is sent in the request body
 
     // Check if the activation code exists in the codes table
     $codeExists = codes::where('code', $activation_code)->exists();
