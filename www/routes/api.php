@@ -38,7 +38,7 @@ Route::get('followerstories/{userId?}', [DeviceController::class, 'getFollowedSt
 Route::get('follower/{userId?}', [DeviceController::class, 'getFollowingUsers']);
 Route::get('followernames/{userId?}', [DeviceController::class, 'getFollowerNames']);
 
-Route::put("follower/delete", [DeviceController::class, 'deleteFriend']);
+Route::put("delete", [DeviceController::class, 'deleteFriend']);
 
 
 Route::get('sendmail', [DeviceController::class, 'sendWelcomeEmail']);
