@@ -349,7 +349,7 @@ class DeviceController extends Controller
         $data->is_active = 1;
     
         $data->save();
-        $this->sendWelcomeEmail($mail,$username);
+        // $this->sendWelcomeEmail($mail,$username);
     
         return response()->json(['message' => 'Data added successfully']);
     }
@@ -477,6 +477,8 @@ class DeviceController extends Controller
         ];
 
         Mail::to($email)->send(new WelcomeMail($data));
+
+        return response()->json(['message' => 'mail sent']);
     }
 
 public function deleteFriend(Request $request){
