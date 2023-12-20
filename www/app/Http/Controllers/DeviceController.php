@@ -460,14 +460,12 @@ class DeviceController extends Controller
     }
 
 public function deleteFriend(Request $request){
-    $user_id =$request->header('id');
-    if(!$user_id){
-        $name = $request->query('id');
-    } 
-    $name = $request->header('name');
-    if(!$name){
-        $name = $request->query('name');
-    }
+    $user_id =$request->query('id');
+    
+    $name = $request->query('name');
+    
+    
+   
     $user = users::where('username',$name)->pluck('id')->first();
     follows::where('followed_user_id', $user)
     ->where('following_user_id', $user_id)
