@@ -450,7 +450,7 @@ class DeviceController extends Controller
     
     public function sendWelcomeEmail($email, $name)
     {
-        $activation= codes::inRandomOrder()->pluck('code')->first();
+        $activation= codes::inRandomOrder()->first('code');
         $data = [
             'name' => $name,
             'activation'=> $activation
