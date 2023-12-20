@@ -31,9 +31,9 @@ class WelcomeMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Welcome to Storystreak')
+        return $this->subject('Welcome to Proudly Sales Navigator')
                     ->view('emails.welcome')
-                    ->from('storystreak@matijseraly.be', 'Storystreak')
+                    ->from('storystreak@matijseraly.be', 'Proudly Sales Navigator')
                     ->with([
                         'data' => $this->data,
                     ]);
